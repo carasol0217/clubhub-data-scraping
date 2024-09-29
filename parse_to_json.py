@@ -69,12 +69,21 @@ def scrape_clubs():
             except:
                 areas_of_interest = "No areas of interest available"
             
-            # Append the data to the list (excluding the description)
+            # Scrape the description from the detail page (e.g., all <p> tags)
+            try:
+                description_elements = driver.find_elements(By.TAG_NAME, "p")
+                descriptions = [desc.text for desc in description_elements if desc.text.strip()]
+                description = "\n".join(descriptions)
+            except:
+                description = "No description available"
+            
+            # Append the data to the list
             scraped_data.append({
                 "name": name,
                 "link": link,
                 "campus": campus,
-                "areas_of_interest": areas_of_interest
+                "areas_of_interest": areas_of_interest,
+                "description": description  # Added the description
             })
 
             # After scraping the additional details, return to the main page to scrape the next club
